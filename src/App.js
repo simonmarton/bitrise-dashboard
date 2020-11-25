@@ -1,25 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import { Flex, Text } from '@bitrise/bitkit';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import BuildList from './components/BuildList';
+
+const App = () => (
+  <Flex padding="x12" direction="vertical">
+    <Text margin="x6" size="x6" textColor="grape-5" weight="bold">
+      Builds
+    </Text>
+    <BuildList />
+  </Flex>
+);
 
 export default App;
