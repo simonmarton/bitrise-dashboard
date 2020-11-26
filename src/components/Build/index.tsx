@@ -1,5 +1,8 @@
 import React from 'react';
-import { Flex, Avatar, Text, Card, CardContent, CardDivider, TypeColors } from '@bitrise/bitkit';
+import { Flex, Avatar, Text, Card, CardContent, CardDivider, TypeColors, ProgressSpinner } from '@bitrise/bitkit';
+import parseISO from 'date-fns/parseISO';
+import formatDistance from 'date-fns/formatDistanceStrict';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const getColorForStatus = (status: string): TypeColors => {
   switch (status) {
@@ -11,19 +14,21 @@ const getColorForStatus = (status: string): TypeColors => {
       return 'grape-3';
     case 'aborted':
       return 'yellow-3';
+    case 'on-hold':
+      return 'blue-3';
     default:
       return 'gray-3';
   }
 };
 
-const Build = ({ triggeredAt, statusText, commitMessage, triggeredWorkflow, repository }: any) => (
-  <Card direction="horizontal" elevation="x2">
+const Build = ({ triggeredAt, finishedAt, statusText, commitMessage, triggeredWorkflow, repository }: any) => (
+  <Card direction="horizontal" elevation="x3">
     <CardContent backgroundColor={getColorForStatus(statusText)} paddingHorizontal="x1" />
     <CardDivider />
     <CardContent padding="x2" grow direction="horizontal" alignChildrenHorizontal="between">
       <Flex direction="horizontal" gap="x2">
         <Avatar name={repository.title} url={repository.avatarUrl} borderRadius="x1" size="3rem" />
-        <Flex direction="vertical" alignChildrenVertical="middle" gap="x1">
+        <Flex direction="vertical" alignChildrenVertical="between">
           <Text config="6" textColor="gray-7">
             {repository.owner.name}
           </Text>
@@ -32,7 +37,15 @@ const Build = ({ triggeredAt, statusText, commitMessage, triggeredWorkflow, repo
           </Text>
         </Flex>
       </Flex>
-      <Text>{triggeredAt}</Text>
+      <Flex direction="vertical" alignChildrenVertical="between" alignChildrenHorizontal="end">
+        <Text>Started {formatDistanceToNow(parseISO(triggeredAt), { addSuffix: true })}</Text>
+        {finishedAt ? (
+          <Text>Finished in {formatDistance(parseISO(triggeredAt), parseISO(finishedAt))}</Text>
+        ) : (
+          <ProgressSpinner size="1rem" />
+        )}
+      </Flex>
+      {/* <Text>{parseISO(triggeredAt).toString()}</Text> */}
     </CardContent>
   </Card>
 );

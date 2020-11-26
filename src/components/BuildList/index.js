@@ -9,16 +9,14 @@ import { API_BASE_URL, API_TOKEN } from '../../config';
 import Build from '../Build';
 
 const BuildList = ({ builds }) => {
-  const { isLoading, isError, error, data } = useQuery(
-    'builds',
-    async () =>
-      axios
-        .get(`${API_BASE_URL}/builds`, {
-          headers: {
-            Authorization: API_TOKEN,
-          },
-        })
-        .then((result) => camelcaseKeys(result.data.data, { deep: true })) // ok..
+  const { isLoading, isError, error, data } = useQuery('builds', async () =>
+    axios
+      .get(`${API_BASE_URL}/builds`, {
+        headers: {
+          Authorization: API_TOKEN,
+        },
+      })
+      .then((result) => camelcaseKeys(result.data.data, { deep: true }))
   );
 
   if (isLoading) {
