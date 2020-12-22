@@ -45,7 +45,6 @@ const Build = ({ triggeredAt, finishedAt, statusText, commitMessage, triggeredWo
           <ProgressSpinner size="1rem" />
         )}
       </Flex>
-      {/* <Text>{parseISO(triggeredAt).toString()}</Text> */}
     </CardContent>
   </Card>
 );

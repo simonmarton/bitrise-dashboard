@@ -1,40 +1,44 @@
-import React from 'react';
-import { useQuery } from 'react-query';
-import axios from 'axios';
-import { Flex } from '@bitrise/bitkit';
-import camelcaseKeys from 'camelcase-keys';
+import React, { useEffect, useState } from 'react';
+import { Appear, Flex, Text, ProgressSpinner } from '@bitrise/bitkit';
 
-import { API_BASE_URL, API_TOKEN } from '../../config';
-
+import { useBuilds } from '../../hooks';
 import Build from '../Build';
 
-const BuildList = ({ builds }) => {
-  const { isLoading, isError, error, data } = useQuery('builds', async () =>
-    axios
-      .get(`${API_BASE_URL}/builds`, {
-        headers: {
-          Authorization: API_TOKEN,
-        },
-      })
-      .then((result) => camelcaseKeys(result.data.data, { deep: true }))
-  );
+const BuildList = () => {
+  const { data, ...query } = useBuilds();
 
-  if (isLoading) {
-    return <h1>loading</h1>;
-  }
+  const [isLoading, setIsLoading] = useState(false);
 
-  if (isError) {
+  // Min time to show spinner
+  useEffect(() => {
+    if (query.isLoading || query.isFetching) {
+      setIsLoading(true);
+    } else {
+      const timeout = setTimeout(() => setIsLoading(false), 1500);
+      return () => clearTimeout(timeout);
+    }
+  }, [query.isLoading, query.isFetching]);
+
+  if (query.isError) {
     return (
       <>
         <h1>Error</h1>
-        <pre>{error.message}</pre>
+        <pre>{query.error.message}</pre>
       </>
     );
   }
 
   return (
     <Flex direction="vertical" gap="x4" paddingVertical="x2">
-      {data.map((build) => (
+      <Flex direction="horizontal" gap="x2" alignChildrenVertical="middle">
+        <Text margin="x6" size="x6" textColor="grape-5" weight="bold">
+          Builds
+        </Text>
+        <Appear animation="Fade" duration="base" visible={isLoading}>
+          <ProgressSpinner textColor="violet-3" />
+        </Appear>
+      </Flex>
+      {data?.map((build) => (
         <Build {...build} key={build.slug} />
       ))}
     </Flex>
