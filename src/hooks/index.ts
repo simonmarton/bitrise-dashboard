@@ -4,8 +4,18 @@ import camelcaseKeys from 'camelcase-keys';
 
 import { API_BASE_URL, API_TOKEN } from '../config';
 
+export type Build = {
+  slug: string;
+  triggeredAt: string;
+  finishedAt: string;
+  statusText: string;
+  commitMessage: string;
+  triggeredWorkflow: string;
+  repository: string;
+};
+
 export const useBuilds = () =>
-  useQuery(
+  useQuery<Build[], Error>(
     'builds',
     async () =>
       axios

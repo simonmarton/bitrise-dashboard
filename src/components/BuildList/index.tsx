@@ -23,7 +23,7 @@ const BuildList = () => {
     return (
       <>
         <h1>Error</h1>
-        <pre>{query.error.message}</pre>
+        <pre>{query.error?.message}</pre>
       </>
     );
   }
