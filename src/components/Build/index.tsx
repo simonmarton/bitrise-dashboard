@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Flex, Avatar, Text, Card, CardContent, CardDivider, TypeColors, ProgressSpinner } from '@bitrise/bitkit';
 import parseISO from 'date-fns/parseISO';
 import formatDistance from 'date-fns/formatDistanceStrict';
@@ -21,8 +22,8 @@ const getColorForStatus = (status: string): TypeColors => {
   }
 };
 
-const Build = ({ triggeredAt, finishedAt, statusText, commitMessage, triggeredWorkflow, repository }: any) => (
-  <Card direction="horizontal" elevation="x3">
+const Build = ({ slug, triggeredAt, finishedAt, statusText, commitMessage, triggeredWorkflow, repository }: any) => (
+  <Card direction="horizontal" elevation="x3" Component={Link} to={`/apps/${repository.slug}/builds/${slug}`}>
     <CardContent backgroundColor={getColorForStatus(statusText)} paddingHorizontal="x1" />
     <CardDivider />
     <CardContent padding="x2" grow direction="horizontal" alignChildrenHorizontal="between">
