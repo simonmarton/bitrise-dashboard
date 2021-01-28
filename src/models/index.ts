@@ -5,5 +5,6 @@ export type Build = {
   statusText: string;
   commitMessage: string;
   triggeredWorkflow: string;
+  triggeredBy: string;
   repository: string;
 };

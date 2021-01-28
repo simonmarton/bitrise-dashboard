@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Appear, Flex, Text, ProgressSpinner } from '@bitrise/bitkit';
 
 import { useBuilds } from '../../hooks';
 import Build from '../Build';
