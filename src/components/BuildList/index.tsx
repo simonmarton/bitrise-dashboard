@@ -1,36 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { useBuilds } from '../../hooks';
 import Build from '../Build';
 import Loadable from '../Loadable';
 
 const BuildList = () => {
-  const { data, ...query } = useBuilds();
+  const { isLoading, isFetching, error, data: builds } = useBuilds();
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Min time to show spinner
-  useEffect(() => {
-    if (query.isLoading || query.isFetching) {
-      setIsLoading(true);
-    } else {
-      const timeout = setTimeout(() => setIsLoading(false), 1500);
-      return () => clearTimeout(timeout);
-    }
-  }, [query.isLoading, query.isFetching]);
-
-  if (query.isError) {
+  if (error) {
     return (
       <>
         <h1>Error</h1>
-        <pre>{query.error?.message}</pre>
+        <pre>{error.message}</pre>
       </>
     );
   }
 
   return (
-    <Loadable title="Builds" isLoading={isLoading}>
-      {data?.map((build) => (
+    <Loadable title="Builds" isLoading={isLoading || isFetching}>
+      {builds?.map((build) => (
         <Build {...build} key={build.slug} />
       ))}
     </Loadable>

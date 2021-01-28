@@ -14,13 +14,22 @@ const BuildDetails = () => {
 
   const [isPolling, setPolling] = useState(false);
 
-  const { data: build, isLoading, isFetching } = useBuild(appSlug, buildSlug, isPolling);
+  const { isLoading, isFetching, error, data: build } = useBuild(appSlug, buildSlug, isPolling);
 
   useEffect(() => {
     if (build) {
       setPolling(['in-progress', 'on-hold'].includes(build.statusText));
     }
   }, [build]);
+
+  if (error) {
+    return (
+      <>
+        <h1>Error</h1>
+        <pre>{error.message}</pre>
+      </>
+    );
+  }
 
   return (
     <Loadable title={build?.triggeredWorkflow || 'Loading..'} isLoading={isLoading || isFetching}>
